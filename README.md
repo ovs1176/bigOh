@@ -7,6 +7,8 @@ The following table shows overview of the Rest APIs that will be exported:
 - POST    `/fill_data/?title=USER`    creating data entry in given title form
 - POST    `/form`                     create new form 
 
+### POSTGRES SETUP
+setup postgres credential in "app/config/db.config.js".  
 
 ### Test the APIs
 install all the dependency module : `npm install`
