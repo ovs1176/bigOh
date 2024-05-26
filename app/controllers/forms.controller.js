@@ -91,7 +91,7 @@ exports.create = async (req, res) => {
 
   let isFormExist = await Forms.findAll({ where: { title } });
 
-  if (isFormExist?.length) return res.status(400).send({ status: false, message: `${title} already exist. ` })
+  if (isFormExist?.length) return res.status(404).send({ status: false, message: `${title} already exist. ` })
 
   const validDataTypes = ["String", "Boolean", "Int", "Float", "Decimal", "UUID", "Email", "Date", "JSON"];
   let missingFields = [];
@@ -111,7 +111,7 @@ exports.create = async (req, res) => {
   if (!validDataTypes.includes(email)) validDataTypeFields.push('email');
   if (!validDataTypes.includes(phoneNumber)) validDataTypeFields.push('phoneNumber');
   if (!validDataTypes.includes(isGraduated)) validDataTypeFields.push('isGraduated');
-  if (validDataTypeFields.length) return res.status(400).send({ status: false, message: 'Enter valid datatype(s): ' + validDataTypeFields.join(', '), validDataTypes });
+  if (validDataTypeFields.length) return res.status(403).send({ status: false, message: 'Enter valid datatype(s): ' + validDataTypeFields.join(', '), validDataTypes });
 
   // Create a new form
   const newForm = {
@@ -144,7 +144,7 @@ exports.createFillData = async (req, res) => {
   const { uniqueId, name, email, phoneNumber, isGraduated } = req.body;
 
   let isFormExist = await Forms.findAll({ where: { title } });
-  if (!isFormExist?.length) return res.status(400).send({ status: false, message: `${title} form doesn't exist.` })
+  if (!isFormExist?.length) return res.status(404).send({ status: false, message: `${title} form doesn't exist.` })
 
   let missingFields = [];
   if (!uniqueId) missingFields.push('uniqueId');
@@ -158,7 +158,7 @@ exports.createFillData = async (req, res) => {
   let DataTypeNotMatch = validationFunc(req.body, isFormExist[0]);
 
   if (DataTypeNotMatch.length) {
-    return res.status(400).send({ status: false, message: `data type does not match(s) : ${DataTypeNotMatch.join(',')}` })
+    return res.status(404).send({ status: false, message: `data type does not match(s) : ${DataTypeNotMatch.join(',')}` })
   }
 
   // ADD data entry form here ------------------- 
@@ -195,7 +195,7 @@ exports.findAll = async (req, res) => {
   var condition = title ? { title: { [Op.iLike]: `%${title}%` } } : null;
 
   let data = await FormData.findAll({ where: condition });
-  return res.send({ title, data })
+  return res.status(200).send({status : true,  title, data })
 
 };
 

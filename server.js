@@ -26,7 +26,7 @@ db.sequelize.sync()
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Server is On." });
+  res.status(200).send({status: true, message: "Server is On." });
 });
 
 require("./app/routes/forms.routes")(app);
